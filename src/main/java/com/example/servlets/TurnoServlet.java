@@ -26,23 +26,35 @@
             String fechaParam = req.getParameter("fecha");
             String estadoParam = req.getParameter("estado");
 
-            // Si se han proporcionado parámetros de filtro
-            if (fechaParam != null && estadoParam != null) {
-                // Convertir la fecha
-                LocalDate fecha = LocalDate.parse(fechaParam);
-                estadoParam = estadoParam.toUpperCase();
-                Turno.EstadoTurno estado = Turno.EstadoTurno.valueOf(estadoParam);
+            // Verificamos si la fecha está presente
+            if (fechaParam != null && !fechaParam.isEmpty()) {
+                try {
+                    // Convertir la fecha a LocalDate
+                    LocalDate fecha = LocalDate.parse(fechaParam);
 
-                // Filtrar los turnos según fecha y estado
-                List<Turno> turnos = turnoController.findTurnosByFechaAndEstado(fecha, String.valueOf(estado));
-                req.setAttribute("turno", turnos);
-            } else if (fechaParam != null) {
-                // Si solo se proporciona fecha
-                LocalDate fecha = LocalDate.parse(fechaParam);
-                List<Turno> turnos = turnoController.findTurnosByFecha(fecha);
-                req.setAttribute("turno", turnos);
+                    if (estadoParam != null && !estadoParam.isEmpty()) {
+                        // Si el estado está presente, filtramos por fecha y estado
+                        estadoParam = estadoParam.toUpperCase();  // Convertir a mayúsculas para comparar con el enum
+
+                        // Convertir el estado recibido (String) a Turno.EstadoTurno (enum)
+                        Turno.EstadoTurno estado = Turno.EstadoTurno.valueOf(estadoParam);
+
+                        // Filtrar los turnos por fecha y estado
+                        List<Turno> turnos = turnoController.findTurnosByFechaAndEstado(fecha, estado);
+                        req.setAttribute("turno", turnos);
+                    } else {
+                        // Si solo se proporciona fecha, filtramos solo por fecha
+                        List<Turno> turnos = turnoController.findTurnosByFecha(fecha);
+                        req.setAttribute("turno", turnos);
+                    }
+
+                } catch (Exception e) {
+                    // Si hay un error al convertir la fecha, enviar un error al cliente
+                    resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Fecha no válida");
+                    return;
+                }
             } else {
-                // Si no se proporciona ningún filtro, listar todos los turnos
+                // Si no se proporciona la fecha, obtener todos los turnos
                 List<Turno> turnos = turnoController.findAll();
                 req.setAttribute("turno", turnos);
             }
@@ -51,37 +63,37 @@
             List<Ciudadano> ciudadanos = turnoController.findAllCiudadanos();
             req.setAttribute("ciudadanos", ciudadanos);
 
-            // Redirigir al JSP para mostrar los turnos
+            // Redirigir al JSP para mostrar los turnos filtrados
             req.getRequestDispatcher("turno.jsp").forward(req, resp);
         }
 
-    @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        @Override
+        protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-        // Obtener parámetros del formulario para crear un nuevo turno
-        String codigo = req.getParameter("codigo");
-        String estadoStr = req.getParameter("estado");
-        String tramite = req.getParameter("tramite");
-        LocalDate fechaParam = LocalDate.parse(req.getParameter("fecha"));
-         // Formato recibido (ej.: 15/01/2025)
-        //DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
-        //LocalDate fecha = LocalDate.parse(fechaParam, formatter);
-        Long ciudadanoId = Long.parseLong(req.getParameter("ciudadano_id"));
+            // Obtener parámetros del formulario para crear un nuevo turno
+            String codigo = req.getParameter("codigo");
+            String estadoStr = req.getParameter("estado");
+            String tramite = req.getParameter("tramite");
+            LocalDate fechaParam = LocalDate.parse(req.getParameter("fecha"));
+             // Formato recibido (ej.: 15/01/2025)
+            //DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
+            //LocalDate fecha = LocalDate.parse(fechaParam, formatter);
+            Long ciudadanoId = Long.parseLong(req.getParameter("ciudadano_id"));
 
-        // Convertir el estado a enum
+            // Convertir el estado a enum
 
-// Convertir a mayúsculas para asegurar que coincide con el enum
-        estadoStr = estadoStr.toUpperCase();
-        Turno.EstadoTurno estado = Turno.EstadoTurno.valueOf(estadoStr);
-
-
+    // Convertir a mayúsculas para asegurar que coincide con el enum
+            estadoStr = estadoStr.toUpperCase();
+            Turno.EstadoTurno estado = Turno.EstadoTurno.valueOf(estadoStr);
 
 
-        // Crear un nuevo turno usando el controlador
-        turnoController.create(codigo, String.valueOf(estado), tramite, fechaParam, ciudadanoId);
 
-        // Redirigir a la lista de turnos después de la creación
-        resp.sendRedirect("turno");
+
+            // Crear un nuevo turno usando el controlador
+            turnoController.create(codigo, String.valueOf(estado), tramite, fechaParam, ciudadanoId);
+
+            // Redirigir a la lista de turnos después de la creación
+            resp.sendRedirect("turno");
+        }
     }
-}
 
