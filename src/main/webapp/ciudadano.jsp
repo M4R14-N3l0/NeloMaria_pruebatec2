@@ -41,14 +41,7 @@
                 </div>
             </div>
 
-            <!-- Mostrar mensaje si existe -->
-            <div class="row mb-4">
-                <div class="col-12">
-                    <p class="text-info">
-                        Mensaje: <%= request.getAttribute("nombre") %>
-                    </p>
-                </div>
-            </div>
+
 
             <!-- Tabla de ciudadanos -->
             <div class="row">
