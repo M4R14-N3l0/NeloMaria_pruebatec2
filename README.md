@@ -2,11 +2,11 @@
 
 ## Aplicación Web con Servlets y JPA ##
 
-* Descripción del Proyecto *
+### Descripción del Proyecto ###
 
 Esta aplicación web gestiona turnos mediante servlets y utiliza JPA para la interacción con una base de datos. Incluye funcionalidades como creación de ciudadanos, asignación de turnos, y filtrado de turnos según criterios específicos.
 
-Requisitos
+### Requisitos ###
 
 Java: Versión 17 o superior
 
@@ -16,7 +16,7 @@ Base de datos: MySQL
 
 Herramienta de construcción: Maven
 
-Instalación
+### Instalación ###
 
 Clona este repositorio.
 
@@ -26,7 +26,7 @@ Crea la base de datos turnos_db en MySQL y configura las credenciales en persist
 
 Ejecuta el proyecto.
 
-Configuración de la Base de Datos
+### Configuración de la Base de Datos ###
 
 La conexión a la base de datos se configura a través de JPA con el archivo persistence.xml:
 
@@ -48,7 +48,7 @@ La conexión a la base de datos se configura a través de JPA con el archivo per
 
 Asegúrate de ajustar los datos según tu configuración local. Es decir, colocar tu usuario y contraseña en la base de datos.
 
-Estructura de Rutas y Servlets
+### Estructura de Rutas y Servlets ###
 
 1. /ciudadano
 
