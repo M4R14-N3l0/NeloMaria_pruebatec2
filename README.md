@@ -1,8 +1,8 @@
-# Segunda evaluación técnica del Bootcamp JAVA en HACK A BOSS #
-
 ## Aplicación Web con Servlets y JPA ##
 
 ### Descripción del Proyecto ###
+
+Segunda evaluación técnica del Bootcamp de JAVA en HACK A BOSS
 
 Esta aplicación web gestiona turnos mediante servlets y utiliza JPA para la interacción con una base de datos. Incluye funcionalidades como creación de ciudadanos, asignación de turnos, y filtrado de turnos según criterios específicos.
 
